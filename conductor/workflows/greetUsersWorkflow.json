@@ -1,0 +1,54 @@
+{
+    "createTime": 1728311443762,
+    "updateTime": 1728311443762,
+    "name": "greetUsersWorkflow",
+    "description": "Greet user(s)",
+    "version": 1,
+    "inputParameters": [
+        "listOfUserNames"
+    ],
+    "tasks": [
+        {
+            "name": "prepareGreetUsersDynamicFork",
+            "description": "Prepares Conductor to trigger as many tasks as there are user greetings to generate",
+            "taskReferenceName": "prepareGreetUsersDynamicForkRef",
+            "type": "SIMPLE",
+            "inputParameters": {
+                "listOfUserNames": "${workflow.input.listOfUserNames}"
+            },
+            "outputKeys": [
+                "dynamicTasks",
+                "dynamicTasksInput"
+            ]
+        },
+        {
+            "name": "greetUsersDynamicFork",
+            "description": "Generates greetings",
+            "taskReferenceName": "greetUsersDynamicForkRef",
+            "inputParameters": {
+                "dynamicTasks": "${prepareGreetUsersDynamicForkRef.output.dynamicTasks}",
+                "dynamicTasksInput": "${prepareGreetUsersDynamicForkRef.output.dynamicTasksInput}"
+            },
+            "type": "FORK_JOIN_DYNAMIC",
+            "dynamicForkTasksParam": "dynamicTasks",
+            "dynamicForkTasksInputParamName": "dynamicTasksInput"
+        },
+        {
+            "name": "greetUsersDynamicForkJoin",
+            "taskReferenceName": "greetUsersDynamicForkJoinRef",
+            "type": "JOIN"
+        }
+    ],
+    "outputParameters": {
+        "output": "${workflow.input.listOfUserNames}"
+    },
+    "restartable": true,
+    "workflowStatusListenerEnabled": false,
+    "ownerEmail": "sebastien@gauthier.tech",
+    "timeoutPolicy": "ALERT_ONLY",
+    "timeoutSeconds": 0,
+    "variables": {},
+    "inputTemplate": {
+        "listOfUserNames": ["Hiccup", "Astrid", "Stoick", "Gobber", "Ruffnut", "Tuffnut"]
+    }
+}

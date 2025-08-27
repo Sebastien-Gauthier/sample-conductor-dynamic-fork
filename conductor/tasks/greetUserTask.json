@@ -1,0 +1,13 @@
+[
+    {
+        "name": "greetUser",
+        "description": "Greets a user",
+        "type": "SIMPLE",
+        "inputKeys": [
+            "userName"
+        ],
+        "outputKeys": [
+            "greeting"
+        ]
+    }
+]
